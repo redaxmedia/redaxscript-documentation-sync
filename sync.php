@@ -23,11 +23,11 @@ $autoloader->init(
 
 $config = Config::getInstance();
 
-/* config */
+/* status and config */
 
+$status = 1;
 $dbUrl = getenv('DB_URL');
 $config->parse($dbUrl);
-$status = 1;
 
 /* database */
 
