@@ -1,0 +1,35 @@
+{
+	"name": "redaxmedia/redaxscript-wiki-sync",
+	"description": "Ultra lightweight Content Management System",
+	"version": "3.0.0",
+	"homepage": "http://redaxscript.com",
+	"license": "GPL-3.0",
+	"repositories":
+	[
+		{
+			"type": "git",
+			"url": "https://github.com/redaxmedia/redaxscript.wiki.git"
+		}
+	],
+	"require":
+	{
+		"php": ">5.4"
+	},
+	"require-dev":
+	{
+		"cebe/markdown": "1.0.1",
+		"redaxmedia/redaxscript": "dev-master",
+		"redaxmedia/redaxscript.wiki": "dev-master"
+	},
+	"scripts":
+	{
+		"post-install-cmd":
+		[
+			"php -r \"!is_file('vendor/j4mie/idiorm/idiorm.php') || rename('vendor/j4mie/idiorm/idiorm.php', 'vendor/j4mie/idiorm/ORM.php');\""
+		],
+		"post-update-cmd":
+		[
+			"@post-install-cmd"
+		]
+	}
+}
