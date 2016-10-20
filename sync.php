@@ -78,13 +78,15 @@ if (Db::getStatus() > 1)
 			$content = $markdown->parse($content);
 			$content = str_replace('<h2>', '<h3 class="rs-title-content-sub">', $content);
 			$content = str_replace('</h2>', '</h3>', $content);
-			$content = str_replace('<pre>', '<codequote>', $content);
-			$content = str_replace('</pre>', '</codequote>', $content);
+			$content = str_replace('<pre>', '<blockcode>', $content);
+			$content = str_replace('</pre>', '</blockcode>', $content);
 			$content = str_replace('<blockquote>', '<blockquote class="rs-box-quote">', $content);
 			$content = str_replace('<ul>', '<ul class="rs-list-default">', $content);
 			$content = str_replace('<ol>', '<ol class="rs-list-default">', $content);
 			$content = str_replace('<table>', '<div class="rs-wrapper-table"><table class="rs-table-default">', $content);
 			$content = str_replace('</table>', '</table></div>', $content);
+			$content = str_replace('[[', '', $content);
+			$content = str_replace(']]', '', $content);
 
 			/* create */
 
