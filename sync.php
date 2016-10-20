@@ -27,16 +27,18 @@ $config = Config::getInstance();
 
 $dbUrl = getenv('DB_URL');
 $config->parse($dbUrl);
+$status = 1;
 
 /* database */
 
 Db::construct($config);
 Db::init();
 
-/* export wiki */
+/* sync wiki */
 
 if (Db::getStatus() > 1)
 {
+	$status = 0;
 	$directory = new Directory();
 	$directory->init('vendor/redaxmedia/redaxscript.wiki',
 	[
@@ -86,7 +88,7 @@ if (Db::getStatus() > 1)
 
 			/* create */
 
-			$status = Db::forTablePrefix('articles')
+			$createStatus = Db::forTablePrefix('articles')
 				->create()
 				->set(
 				[
@@ -99,12 +101,20 @@ if (Db::getStatus() > 1)
 					'category' => 1000
 				])
 				->save();
-			echo $status ? '.' : 'F';
+
+			/* handle status */
+
+			if ($createStatus)
+			{
+				echo '.';
+			}
+			else
+			{
+				$status = 1;
+				echo 'F';
+			}
 		}
 	}
 	echo PHP_EOL;
 }
-else
-{
-	exit();
-}
+exit($status);
