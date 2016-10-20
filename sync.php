@@ -104,3 +104,7 @@ if (Db::getStatus() > 1)
 	}
 	echo PHP_EOL;
 }
+else
+{
+	exit();
+}
