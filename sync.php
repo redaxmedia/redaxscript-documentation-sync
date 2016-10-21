@@ -39,6 +39,7 @@ Db::init();
 if (Db::getStatus() > 1)
 {
 	$status = 0;
+	$markdown = new Markdown();
 	$directory = new Directory();
 	$directory->init('vendor/redaxmedia/redaxscript.wiki',
 	[
@@ -46,7 +47,7 @@ if (Db::getStatus() > 1)
 		'_Sidebar.md'
 	]);
 	$directoryArray = $directory->getArray();
-	$markdown = new Markdown();
+	$syncArray = json_decode(file_get_contents('sync.json'), true);
 	$author = 'wiki-sync';
 	$counter = 1000;
 
@@ -76,17 +77,7 @@ if (Db::getStatus() > 1)
 			$alias = strtolower($pathinfo['filename']);
 			$content = file_get_contents('vendor/redaxmedia/redaxscript.wiki/' . $value);
 			$content = $markdown->parse($content);
-			$content = str_replace('<h2>', '<h3 class="rs-title-content-sub">', $content);
-			$content = str_replace('</h2>', '</h3>', $content);
-			$content = str_replace('<pre>', '<blockcode>', $content);
-			$content = str_replace('</pre>', '</blockcode>', $content);
-			$content = str_replace('<blockquote>', '<blockquote class="rs-box-quote">', $content);
-			$content = str_replace('<ul>', '<ul class="rs-list-default">', $content);
-			$content = str_replace('<ol>', '<ol class="rs-list-default">', $content);
-			$content = str_replace('<table>', '<div class="rs-wrapper-table"><table class="rs-table-default">', $content);
-			$content = str_replace('</table>', '</table></div>', $content);
-			$content = str_replace('[[', '', $content);
-			$content = str_replace(']]', '', $content);
+			$content = str_replace($syncArray['search'], $syncArray['replace'], $content);
 
 			/* create */
 

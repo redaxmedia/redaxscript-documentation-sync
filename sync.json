@@ -1,0 +1,28 @@
+{
+	"search":
+	[
+		"<h2>",
+		"</h2>",
+		"<pre>",
+		"</pre>",
+		"<ul>",
+		"<ol>",
+		"<table>",
+		"</table>",
+		"[[",
+		"]]"
+	],
+	"replace":
+	[
+		"<h3 class=\"rs-title-content-sub\">",
+		"</h3>",
+		"<blockcode>",
+		"</blockcode>",
+		"<ul class=\"rs-list-default\">",
+		"<ol class=\"rs-list-default\">",
+		"<div class=\"rs-wrapper-table\"><table class=\"rs-table-default\">",
+		"</table></div>",
+		"",
+		""
+	]
+}
