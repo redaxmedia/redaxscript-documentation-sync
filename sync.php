@@ -52,8 +52,8 @@ if (Db::getStatus() > 1)
 
 	/* delete */
 
-	Db::forTablePrefix('categories')->where('author', $author)->deleteMany();
-	Db::forTablePrefix('articles')->where('author', $author)->deleteMany();
+	Db::forTablePrefix('categories')->whereIdIs(1000)->deleteMany();
+	Db::forTablePrefix('articles')->where('category', 1000)->deleteMany();
 	Db::forTablePrefix('categories')
 		->create()
 		->set(
@@ -118,5 +118,10 @@ if (Db::getStatus() > 1)
 		}
 	}
 	echo PHP_EOL;
+
+	/* auto increment */
+
+	Db::rawInstance()->rawExecute('ALTER TABLE categories AUTO_INCREMENT = 2000');
+	Db::rawInstance()->rawExecute('ALTER TABLE articles AUTO_INCREMENT = 2000');
 }
 exit($status);
