@@ -39,6 +39,7 @@ Db::init();
 if (Db::getStatus() === 2)
 {
 	$status = 0;
+	$reader = new Reader();
 	$markdown = new Markdown();
 	$directory = new Directory();
 	$directory->init('vendor/redaxmedia/redaxscript.wiki',
@@ -47,7 +48,7 @@ if (Db::getStatus() === 2)
 		'_Sidebar.md'
 	]);
 	$directoryArray = $directory->getArray();
-	$syncArray = json_decode(file_get_contents('sync.json'), true);
+	$syncArray = $reader->loadJSON('sync.json', true)->getArray();
 	$author = 'wiki-sync';
 	$categoryId = 1000;
 	$articleId = 1000;
