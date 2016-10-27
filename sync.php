@@ -36,7 +36,7 @@ Db::init();
 
 /* sync wiki */
 
-if (Db::getStatus() > 1)
+if (Db::getStatus() === 2)
 {
 	$status = 0;
 	$markdown = new Markdown();
@@ -49,17 +49,18 @@ if (Db::getStatus() > 1)
 	$directoryArray = $directory->getArray();
 	$syncArray = json_decode(file_get_contents('sync.json'), true);
 	$author = 'wiki-sync';
-	$counter = 1000;
+	$categoryId = 1000;
+	$articleId = 1000;
 
 	/* delete */
 
-	Db::forTablePrefix('categories')->whereIdIs(1000)->deleteMany();
-	Db::forTablePrefix('articles')->where('category', 1000)->deleteMany();
+	Db::forTablePrefix('categories')->whereIdIs($categoryId)->deleteMany();
+	Db::forTablePrefix('articles')->where('category', $categoryId)->deleteMany();
 	Db::forTablePrefix('categories')
 		->create()
 		->set(
 		[
-			'id' => 1000,
+			'id' => $categoryId,
 			'title' => 'Documentation',
 			'alias' => 'documentation',
 			'author' => $author
@@ -85,13 +86,13 @@ if (Db::getStatus() > 1)
 				->create()
 				->set(
 				[
-					'id' => $counter++,
+					'id' => $articleId++,
 					'title' => $title,
 					'alias' => $alias,
 					'author' => $author,
 					'text' => $content,
-					'rank' => $counter,
-					'category' => 1000
+					'rank' => $articleId,
+					'category' => $categoryId
 				])
 				->save();
 
