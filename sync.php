@@ -16,7 +16,7 @@ $autoloader->init(
 [
 	'Redaxscript' => 'vendor/redaxmedia/redaxscript/includes',
 	'cebe\markdown' => 'vendor/cebe/markdown',
-	'vendor/j4mie/idiorm'
+	'vendor/redaxmedia/redaxscript/libraries'
 ]);
 
 /* get instance */

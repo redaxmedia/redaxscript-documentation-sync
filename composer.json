@@ -25,7 +25,7 @@
 	{
 		"post-install-cmd":
 		[
-			"php -r \"!is_file('vendor/j4mie/idiorm/idiorm.php') || rename('vendor/j4mie/idiorm/idiorm.php', 'vendor/j4mie/idiorm/ORM.php');\""
+			"cd vendor/redaxmedia/redaxscript && composer install --no-dev"
 		],
 		"post-update-cmd":
 		[
