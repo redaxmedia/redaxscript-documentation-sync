@@ -114,7 +114,7 @@ if (Db::getStatus() === 2)
 
 	/* auto increment */
 
-	Db::rawInstance()->rawExecute('ALTER TABLE categories AUTO_INCREMENT = 2000');
-	Db::rawInstance()->rawExecute('ALTER TABLE articles AUTO_INCREMENT = 2000');
+	Db::rawInstance()->rawExecute('ALTER TABLE categories AUTO_INCREMENT = 3000');
+	Db::rawInstance()->rawExecute('ALTER TABLE articles AUTO_INCREMENT = 3000');
 }
 exit($status);
