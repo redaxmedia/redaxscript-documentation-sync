@@ -48,7 +48,7 @@ if (Db::getStatus() === 2)
 		'_Sidebar.md'
 	]);
 	$directoryArray = $directory->getArray();
-	$syncArray = $reader->loadJSON('sync.json', true)->getArray();
+	$tidyArray = $reader->loadJSON('tidy.json', true)->getArray();
 	$author = 'wiki-sync';
 	$categoryId = 1000;
 	$articleId = 1000;
@@ -79,7 +79,7 @@ if (Db::getStatus() === 2)
 			$alias = strtolower($pathinfo['filename']);
 			$content = file_get_contents('vendor/redaxmedia/redaxscript.wiki/' . $value);
 			$content = $markdown->parse($content);
-			$content = str_replace($syncArray['search'], $syncArray['replace'], $content);
+			$content = str_replace($tidyArray['search'], $tidyArray['replace'], $content);
 
 			/* create */
 
