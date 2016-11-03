@@ -2,6 +2,8 @@
 namespace Redaxscript;
 
 use cebe\markdown\GithubMarkdown as Markdown;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 error_reporting(E_ERROR || E_PARSE);
 
@@ -34,29 +36,24 @@ $config->parse($dbUrl);
 Db::construct($config);
 Db::init();
 
-/* sync wiki */
+/* sync documentation */
 
 if (Db::getStatus() === 2)
 {
 	$status = 0;
 	$reader = new Reader();
 	$markdown = new Markdown();
-	$directory = new Directory();
-	$directory->init('vendor/redaxmedia/redaxscript.wiki',
-	[
-		'Home.md',
-		'_Sidebar.md'
-	]);
-	$directoryArray = $directory->getArray();
+	$directory = new RecursiveDirectoryIterator('vendor/redaxmedia/redaxscript-documentation/documentation', RecursiveDirectoryIterator::SKIP_DOTS);
+	$directoryIterator = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::SELF_FIRST);
 	$tidyArray = $reader->loadJSON('tidy.json', true)->getArray();
-	$author = 'wiki-sync';
+	$author = 'documentation-sync';
 	$categoryId = 1000;
 	$articleId = 1000;
 
 	/* delete */
 
-	Db::forTablePrefix('categories')->whereIdIs($categoryId)->deleteMany();
-	Db::forTablePrefix('articles')->where('category', $categoryId)->deleteMany();
+	Db::forTablePrefix('categories')->where('author', 'documentation-sync')->deleteMany();
+	Db::forTablePrefix('articles')->where('author', 'documentation-sync')->deleteMany();
 	Db::forTablePrefix('categories')
 		->create()
 		->set(
@@ -70,19 +67,39 @@ if (Db::getStatus() === 2)
 
 	/* process directory */
 
-	foreach ($directoryArray as $value)
+	foreach ($directoryIterator as $key => $value)
 	{
-		$pathinfo = pathinfo($value);
-		if ($pathinfo['extension'] === 'md')
+		$basenameArray = explode('.', $value->getBasename());
+		$title = ucwords(str_replace('-', ' ', $basenameArray[1]));
+		$alias = $basenameArray[1];
+		$rank = intval($basenameArray[0]);
+
+		/* create category */
+
+		if ($value->isDir())
 		{
-			$title = str_replace('-', ' ', $pathinfo['filename']);
-			$alias = strtolower($pathinfo['filename']);
-			$content = file_get_contents('vendor/redaxmedia/redaxscript.wiki/' . $value);
+			$createStatus = Db::forTablePrefix('categories')
+				->create()
+				->set(
+				[
+					'id' => ++$categoryId,
+					'title' => $title,
+					'alias' => $alias,
+					'author' => $author,
+					'rank' => $rank,
+					'parent' => 1000
+				])
+				->save();
+		}
+
+		/* else create article */
+
+		else
+		{
+			$directoryParent = trim(strrchr(dirname($value->getPathname()), '/'), '/');
+			$content = file_get_contents($value->getPathname());
 			$content = $markdown->parse($content);
 			$content = str_replace($tidyArray['search'], $tidyArray['replace'], $content);
-
-			/* create */
-
 			$createStatus = Db::forTablePrefix('articles')
 				->create()
 				->set(
@@ -92,22 +109,22 @@ if (Db::getStatus() === 2)
 					'alias' => $alias,
 					'author' => $author,
 					'text' => $content,
-					'rank' => $articleId,
-					'category' => $categoryId
+					'rank' => $rank,
+					'category' => $directoryParent === 'documentation' ? 1000 : $categoryId
 				])
 				->save();
+		}
 
-			/* handle status */
+		/* handle status */
 
-			if ($createStatus)
-			{
-				echo '.';
-			}
-			else
-			{
-				$status = 1;
-				echo 'F';
-			}
+		if ($createStatus)
+		{
+			echo '.';
+		}
+		else
+		{
+			$status = 1;
+			echo 'F';
 		}
 	}
 	echo PHP_EOL;

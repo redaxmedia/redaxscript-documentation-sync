@@ -8,7 +8,7 @@
 	[
 		{
 			"type": "git",
-			"url": "https://github.com/redaxmedia/redaxscript.wiki.git"
+			"url": "https://github.com/redaxmedia/redaxscript-documentation.git"
 		}
 	],
 	"require":
@@ -19,7 +19,7 @@
 	{
 		"cebe/markdown": "1.0.1",
 		"redaxmedia/redaxscript": "dev-master",
-		"redaxmedia/redaxscript.wiki": "dev-master"
+		"redaxmedia/redaxscript-documentation": "dev-master"
 	},
 	"scripts":
 	{
