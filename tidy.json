@@ -9,9 +9,7 @@
 		"<ul>",
 		"<ol>",
 		"<table>",
-		"</table>",
-		"[[",
-		"]]"
+		"</table>"
 	],
 	"replace":
 	[
@@ -23,8 +21,6 @@
 		"<ul class=\"rs-list-default\">",
 		"<ol class=\"rs-list-default\">",
 		"<div class=\"rs-wrapper-table\"><table class=\"rs-table-default\">",
-		"</table></div>",
-		null,
-		null
+		"</table></div>"
 	]
 }
