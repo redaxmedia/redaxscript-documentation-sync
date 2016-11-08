@@ -1,6 +1,6 @@
 {
-	"name": "redaxmedia/redaxscript-wiki-sync",
-	"description": "Ultra lightweight Content Management System",
+	"name": "redaxmedia/redaxscript-documentation-sync",
+	"description": "Yet another cronjob for Redaxscript's website",
 	"version": "3.0.0",
 	"homepage": "http://redaxscript.com",
 	"license": "GPL-3.0",
