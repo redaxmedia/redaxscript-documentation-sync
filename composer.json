@@ -17,7 +17,7 @@
 	},
 	"require-dev":
 	{
-		"cebe/markdown": "1.0.1",
+		"cebe/markdown": "1.1.1",
 		"redaxmedia/redaxscript": "dev-master",
 		"redaxmedia/redaxscript-documentation": "dev-master"
 	},
