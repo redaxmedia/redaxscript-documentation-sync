@@ -97,9 +97,11 @@ if (Db::getStatus() === 2)
 		else
 		{
 			$directoryParent = trim(strrchr(dirname($value->getPathname()), '/'), '/');
+			$href = str_replace('vendor/redaxmedia/redaxscript-documentation', 'https://github.com/redaxmedia/redaxscript-documentation/edit/master', $value->getPathname());
 			$content = file_get_contents($value->getPathname());
 			$content = $markdown->parse($content);
 			$content = str_replace($tidyArray['search'], $tidyArray['replace'], $content);
+			$content .= '<a href="' . $href . '" class="rs-link-documentation">Edit on GitHub</a>';
 			$createStatus = Db::forTablePrefix('articles')
 				->create()
 				->set(
