@@ -1,6 +1,7 @@
 {
 	"search":
 	[
+		"<a href",
 		"<h2>",
 		"</h2>",
 		"<pre><code>",
@@ -13,6 +14,7 @@
 	],
 	"replace":
 	[
+		"<a class=\"rs-link-default\" href",
 		"<h3 class=\"rs-title-content-sub\">",
 		"</h3>",
 		"<blockcode>",
