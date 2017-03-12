@@ -1,7 +1,7 @@
 <?php
 namespace Redaxscript;
 
-use cebe\markdown\GithubMarkdown as Markdown;
+use Doc;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -16,10 +16,13 @@ include_once('vendor/redaxmedia/redaxscript/includes/Autoloader.php');
 $autoloader = new Autoloader();
 $autoloader->init(
 [
+	'Doc' => 'includes',
 	'Redaxscript' => 'vendor/redaxmedia/redaxscript/includes',
 	'cebe\markdown' => 'vendor/cebe/markdown',
 	'vendor/redaxmedia/redaxscript/libraries'
 ]);
+$language = Language::getInstance();
+$language->init();
 
 /* get instance */
 
@@ -41,14 +44,13 @@ Db::init();
 if (Db::getStatus() === 2)
 {
 	$status = 0;
-	$reader = new Reader();
-	$markdown = new Markdown();
-	$directory = new RecursiveDirectoryIterator('vendor/redaxmedia/redaxscript-documentation/documentation', RecursiveDirectoryIterator::SKIP_DOTS);
+	$docParser = new Doc\Parser($language);
+	$path = 'vendor/redaxmedia/redaxscript-documentation/documentation';
+	$directory = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
 	$directoryIterator = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::SELF_FIRST);
-	$tidyArray = $reader->loadJSON('tidy.json', true)->getArray();
 	$author = 'documentation-sync';
-	$categoryId = 1000;
-	$articleId = 1000;
+	$categoryCounter = $parentId = 1000;
+	$articleCounter = 1000;
 
 	/* delete */
 
@@ -58,7 +60,7 @@ if (Db::getStatus() === 2)
 		->create()
 		->set(
 		[
-			'id' => $categoryId,
+			'id' => $categoryCounter,
 			'title' => 'Documentation',
 			'alias' => 'documentation',
 			'author' => $author
@@ -69,10 +71,9 @@ if (Db::getStatus() === 2)
 
 	foreach ($directoryIterator as $key => $value)
 	{
-		$basenameArray = explode('.', $value->getBasename());
-		$title = ucwords(str_replace('-', ' ', $basenameArray[1]));
-		$alias = $basenameArray[1];
-		$rank = intval($basenameArray[0]);
+		$title = $docParser->getName($value);
+		$alias = $docParser->getAlias($value);
+		$rank = $docParser->getRank($value);
 
 		/* create category */
 
@@ -82,12 +83,12 @@ if (Db::getStatus() === 2)
 				->create()
 				->set(
 				[
-					'id' => ++$categoryId,
+					'id' => ++$categoryCounter,
 					'title' => $title,
 					'alias' => $alias,
 					'author' => $author,
 					'rank' => $rank,
-					'parent' => 1000
+					'parent' => $parentId
 				])
 				->save();
 		}
@@ -96,23 +97,19 @@ if (Db::getStatus() === 2)
 
 		else
 		{
-			$directoryParent = trim(strrchr(dirname($value->getPathname()), '/'), '/');
-			$href = str_replace('vendor/redaxmedia/redaxscript-documentation', 'https://github.com/redaxmedia/redaxscript-documentation/edit/master', $value->getPathname());
-			$content = file_get_contents($value->getPathname());
-			$content = $markdown->parse($content);
-			$content = str_replace($tidyArray['search'], $tidyArray['replace'], $content);
-			$content .= '<a href="' . $href . '" class="rs-link-documentation">Edit on GitHub</a>';
+			$parentAlias = $docParser->getParent($value);
+			$articleText = $docParser->getContent($value);
 			$createStatus = Db::forTablePrefix('articles')
 				->create()
 				->set(
 				[
-					'id' => $articleId++,
+					'id' => $articleCounter++,
 					'title' => $title,
 					'alias' => $alias,
 					'author' => $author,
-					'text' => $content,
+					'text' => $articleText,
 					'rank' => $rank,
-					'category' => $directoryParent === 'documentation' ? 1000 : $categoryId
+					'category' => $parentAlias === 'documentation' ? $parentId : $categoryCounter
 				])
 				->save();
 		}
