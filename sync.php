@@ -52,8 +52,8 @@ if (Db::getStatus() === 2)
 
 	/* delete */
 
-	Db::forTablePrefix('categories')->where('author', 'documentation-sync')->deleteMany();
-	Db::forTablePrefix('articles')->where('author', 'documentation-sync')->deleteMany();
+	Db::forTablePrefix('categories')->where('author', $author)->deleteMany();
+	Db::forTablePrefix('articles')->where('author', $author)->deleteMany();
 	Db::forTablePrefix('categories')
 		->create()
 		->set(
