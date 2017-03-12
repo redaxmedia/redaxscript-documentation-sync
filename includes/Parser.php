@@ -162,7 +162,8 @@ class Parser
 			->init('a',
 			[
 				'class' => 'rs-link-documentation',
-				'href' => $href
+				'href' => $href,
+				'target' => '_blank'
 			])
 			->text($this->_language->get('edit_github'));
 
