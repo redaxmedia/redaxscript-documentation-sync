@@ -21,8 +21,6 @@ $autoloader->init(
 	'cebe\markdown' => 'vendor/cebe/markdown',
 	'vendor/redaxmedia/redaxscript/libraries'
 ]);
-$language = Language::getInstance();
-$language->init();
 
 /* get instance */
 
@@ -39,6 +37,11 @@ $config->parse($dbUrl);
 Db::construct($config);
 Db::init();
 
+/* language */
+
+$language = Language::getInstance();
+$language->init();
+
 /* sync documentation */
 
 if (Db::getStatus() === 2)
@@ -52,10 +55,13 @@ if (Db::getStatus() === 2)
 	$categoryCounter = $parentId = 1000;
 	$articleCounter = 1000;
 
-	/* delete */
+	/* delete category and article */
 
 	Db::forTablePrefix('categories')->where('author', $author)->deleteMany();
 	Db::forTablePrefix('articles')->where('author', $author)->deleteMany();
+
+	/* create category */
+
 	Db::forTablePrefix('categories')
 		->create()
 		->set(
@@ -105,7 +111,7 @@ if (Db::getStatus() === 2)
 				[
 					'id' => $articleCounter++,
 					'title' => $title,
-					'alias' => $alias,
+					'alias' => $alias . '-' . $articleCounter,
 					'author' => $author,
 					'text' => $articleText,
 					'rank' => $rank,
