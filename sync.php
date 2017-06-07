@@ -2,8 +2,7 @@
 namespace Redaxscript;
 
 use Doc;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
+use Redaxscript\Filesystem;
 
 error_reporting(E_ERROR || E_PARSE);
 
@@ -48,9 +47,9 @@ if (Db::getStatus() === 2)
 {
 	$status = 0;
 	$docParser = new Doc\Parser($language);
-	$path = 'vendor/redaxmedia/redaxscript-documentation/documentation';
-	$directory = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
-	$directoryIterator = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::SELF_FIRST);
+	$docFilesystem = new Filesystem\Filesystem();
+	$docFilesystem->init('vendor/redaxmedia/redaxscript-documentation/documentation', true);
+	$docFilesystemInterator = $docFilesystem->getIterator();
 	$author = 'documentation-sync';
 	$categoryCounter = $parentId = 1000;
 	$articleCounter = 1000;
@@ -73,9 +72,9 @@ if (Db::getStatus() === 2)
 		])
 		->save();
 
-	/* process directory */
+	/* process filesystem */
 
-	foreach ($directoryIterator as $key => $value)
+	foreach ($docFilesystemInterator as $key => $value)
 	{
 		$title = $docParser->getName($value);
 		$alias = $docParser->getAlias($value);
