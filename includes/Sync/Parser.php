@@ -169,7 +169,7 @@ class Parser
 
 	protected function _renderLink($path = null) : string
 	{
-		$href = str_replace('vendor' . DIRECTORY_SEPARATOR . 'redaxscript' . DIRECTORY_SEPARATOR . 'redaxscript-documentation', 'https://github.com/redaxmedia/redaxscript-documentation/edit/master', $path);
+		$href = str_replace('vendor' . DIRECTORY_SEPARATOR . 'redaxscript' . DIRECTORY_SEPARATOR . 'redaxscript-documentation', 'https://github.com/redaxscript/redaxscript-documentation/edit/master', $path);
 
 		/* html elements */
 
