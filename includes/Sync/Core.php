@@ -72,7 +72,7 @@ class Core
 	{
 		$parser = new Parser($this->_language);
 		$filesystem = new Filesystem\Filesystem();
-		$filesystem->init('vendor' . DIRECTORY_SEPARATOR . 'redaxmedia' . DIRECTORY_SEPARATOR . 'redaxscript-documentation' . DIRECTORY_SEPARATOR . 'documentation', true);
+		$filesystem->init('vendor' . DIRECTORY_SEPARATOR . 'redaxscript' . DIRECTORY_SEPARATOR . 'redaxscript-documentation' . DIRECTORY_SEPARATOR . 'documentation', true);
 		$filesystemInterator = $filesystem->getIterator();
 		$author = 'documentation-sync';
 		$categoryCounter = $parentId = 1000;
