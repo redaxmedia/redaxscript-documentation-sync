@@ -1,5 +1,5 @@
 {
-	"name": "redaxmedia/redaxscript-documentation-sync",
+	"name": "redaxscript/redaxscript-documentation-sync",
 	"description": "Yet another cronjob for Redaxscript's website",
 	"version": "4.0.0",
 	"homepage": "https://redaxscript.com",
@@ -8,7 +8,7 @@
 	[
 		{
 			"type": "git",
-			"url": "https://github.com/redaxmedia/redaxscript-documentation.git"
+			"url": "https://github.com/redaxscript/redaxscript-documentation.git"
 		}
 	],
 	"require":
@@ -18,14 +18,14 @@
 	"require-dev":
 	{
 		"cebe/markdown": "1.1.2",
-		"redaxmedia/redaxscript": "dev-master",
-		"redaxmedia/redaxscript-documentation": "dev-master"
+		"redaxscript/redaxscript": "dev-master",
+		"redaxscript/redaxscript-documentation": "dev-master"
 	},
 	"scripts":
 	{
 		"post-install-cmd":
 		[
-			"cd vendor/redaxmedia/redaxscript && composer install"
+			"cd vendor/redaxscript/redaxscript && composer install"
 		],
 		"post-update-cmd":
 		[
