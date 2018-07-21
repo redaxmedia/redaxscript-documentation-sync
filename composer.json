@@ -13,12 +13,11 @@
 	],
 	"require":
 	{
-		"j4mie/idiorm": "v1.5.4",
 		"php": "^7.1"
 	},
 	"require-dev":
 	{
-		"cebe/markdown": "1.1.2",
+		"cebe/markdown": "1.2.1",
 		"redaxmedia/php-coding-standard": "1.0.0",
 		"redaxscript/redaxscript": "dev-master",
 		"redaxscript/redaxscript-documentation": "dev-master",
