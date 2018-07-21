@@ -174,7 +174,7 @@ class Core
 
 	protected function _setAutoIncrement(int $increment = 0)
 	{
-		Db::getInstance()->rawExecute('ALTER TABLE ' . $this->_config->get('dbPrefix') . 'categories AUTO_INCREMENT = ' . $increment);
-		Db::getInstance()->rawExecute('ALTER TABLE ' . $this->_config->get('dbPrefix') . 'articles AUTO_INCREMENT = ' . $increment);
+		Db::getDb()->rawExecute('ALTER TABLE ' . $this->_config->get('dbPrefix') . 'categories AUTO_INCREMENT = ' . $increment);
+		Db::getDb()->rawExecute('ALTER TABLE ' . $this->_config->get('dbPrefix') . 'articles AUTO_INCREMENT = ' . $increment);
 	}
 }
