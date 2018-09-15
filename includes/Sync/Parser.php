@@ -119,9 +119,7 @@ class Parser
 		$markdown = new Markdown();
 		$path = $item->getPathname();
 		$content = file_get_contents($path);
-		$output = $this->_tidyContent($markdown->parse($content));
-		$output .= $this->_renderLink($path);
-		return $output;
+		return $this->_tidyContent($markdown->parse($content)) . $this->_renderLink($path);
 	}
 
 	/**
@@ -149,12 +147,11 @@ class Parser
 	 * @return string
 	 */
 
-	protected function _tidyContent($content = null) : string
+	protected function _tidyContent(string $content = null) : string
 	{
 		$reader = new Reader();
 		$tidyArray = $reader->loadJSON('tidy.json', true)->getArray();
-		$output = str_replace($tidyArray['search'], $tidyArray['replace'], $content);
-		return $output;
+		return str_replace($tidyArray['search'], $tidyArray['replace'], $content);
 	}
 
 	/**
@@ -167,7 +164,7 @@ class Parser
 	 * @return string
 	 */
 
-	protected function _renderLink($path = null) : string
+	protected function _renderLink(string $path = null) : string
 	{
 		$href = str_replace('vendor' . DIRECTORY_SEPARATOR . 'redaxscript' . DIRECTORY_SEPARATOR . 'redaxscript-documentation', 'https://github.com/redaxscript/redaxscript-documentation/edit/master', $path);
 
