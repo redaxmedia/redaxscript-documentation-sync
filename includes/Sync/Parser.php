@@ -85,7 +85,7 @@ class Parser
 	public function getRank(SplFileInfo $item = null) : int
 	{
 		$basenameArray = $this->_getBasenameArray($item);
-		return intval($basenameArray[0]);
+		return (int)$basenameArray[0];
 	}
 
 	/**
@@ -147,10 +147,10 @@ class Parser
 	 * @return string
 	 */
 
-	protected function _tidyContent(string $content = null) : string
+	protected function _tidyContent($content = null) : string
 	{
 		$reader = new Reader();
-		$tidyArray = $reader->loadJSON('tidy.json', true)->getArray();
+		$tidyArray = $reader->loadJSON('tidy.json')->getArray();
 		return str_replace($tidyArray['search'], $tidyArray['replace'], $content);
 	}
 
@@ -164,24 +164,20 @@ class Parser
 	 * @return string
 	 */
 
-	protected function _renderLink(string $path = null) : string
+	protected function _renderLink($path = null) : string
 	{
 		$href = str_replace('vendor' . DIRECTORY_SEPARATOR . 'redaxscript' . DIRECTORY_SEPARATOR . 'redaxscript-documentation', 'https://github.com/redaxscript/redaxscript-documentation/edit/master', $path);
 
 		/* html elements */
 
 		$linkElement = new Html\Element();
-		$linkElement->init('a',
-		[
-			'class' => 'rs-link-documentation',
-			'href' => $href,
-			'target' => '_blank'
-		])
-		->text($this->_language->get('edit_github'));
-
-		/* collect output */
-
-		$output = $linkElement;
-		return $output;
+		return $linkElement
+			->init('a',
+			[
+				'class' => 'rs-link-documentation',
+				'href' => $href,
+				'target' => '_blank'
+			])
+			->text($this->_language->get('edit_github'));
 	}
 }

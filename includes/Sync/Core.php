@@ -1,9 +1,10 @@
 <?php
 namespace Sync;
 
+use Redaxscript\Admin;
 use Redaxscript\Config;
-use Redaxscript\Db;
 use Redaxscript\Dater;
+use Redaxscript\Db;
 use Redaxscript\Filesystem;
 use Redaxscript\Language;
 
@@ -74,33 +75,33 @@ class Core
 		$dater = new Dater();
 		$dater->init();
 		$now = $dater->getDateTime()->getTimeStamp();
+		$categoryModel = new Admin\Model\Category();
+		$articleModel = new Admin\Model\Article();
 		$parser = new Parser($this->_language);
 		$filesystem = new Filesystem\Filesystem();
 		$filesystem->init('vendor' . DIRECTORY_SEPARATOR . 'redaxscript' . DIRECTORY_SEPARATOR . 'redaxscript-documentation' . DIRECTORY_SEPARATOR . 'documentation', true);
 		$filesystemInterator = $filesystem->getIterator();
 		$author = 'documentation-sync';
-		$categoryCounter = $parentId = 1000;
+		$categoryCounter = 1000;
+		$parentId = 1000;
 		$articleCounter = 1000;
 		$status = 0;
 
-		/* delete category and article */
+		/* delete first */
 
-		Db::forTablePrefix('categories')->where('author', $author)->deleteMany();
-		Db::forTablePrefix('articles')->where('author', $author)->deleteMany();
+		$categoryModel->query()->where('author', $author)->deleteMany();
+		$articleModel->query()->where('author', $author)->deleteMany();
 
 		/* create category */
 
-		Db::forTablePrefix('categories')
-			->create()
-			->set(
-			[
-				'id' => $categoryCounter,
-				'title' => 'Documentation',
-				'alias' => 'documentation',
-				'author' => $author,
-				'date' => $now
-			])
-			->save();
+		$categoryModel->createByArray(
+		[
+			'id' => $categoryCounter,
+			'title' => 'Documentation',
+			'alias' => 'documentation',
+			'author' => $author,
+			'date' => $now
+		]);
 
 		/* process filesystem */
 
@@ -114,19 +115,16 @@ class Core
 
 			if ($value->isDir())
 			{
-				$createStatus = Db::forTablePrefix('categories')
-					->create()
-					->set(
-					[
-						'id' => ++$categoryCounter,
-						'title' => $title,
-						'alias' => $alias,
-						'author' => $author,
-						'rank' => $rank,
-						'parent' => $parentId,
-						'date' => $now
-					])
-					->save();
+				$createStatus = $categoryModel->createByArray(
+				[
+					'id' => ++$categoryCounter,
+					'title' => $title,
+					'alias' => $alias,
+					'author' => $author,
+					'rank' => $rank,
+					'parent' => $parentId,
+					'date' => $now
+				]);
 			}
 
 			/* else create article */
@@ -135,20 +133,17 @@ class Core
 			{
 				$parentAlias = $parser->getParent($value);
 				$articleText = $parser->getContent($value);
-				$createStatus = Db::forTablePrefix('articles')
-					->create()
-					->set(
-					[
-						'id' => $articleCounter++,
-						'title' => $title,
-						'alias' => $alias . '-' . $articleCounter,
-						'author' => $author,
-						'text' => $articleText,
-						'rank' => $rank,
-						'category' => $parentAlias === 'documentation' ? $parentId : $categoryCounter,
-						'date' => $now
-					])
-					->save();
+				$createStatus = $articleModel->createByArray(
+				[
+					'id' => $articleCounter++,
+					'title' => $title,
+					'alias' => $alias . '-' . $articleCounter,
+					'author' => $author,
+					'text' => $articleText,
+					'rank' => $rank,
+					'category' => $parentAlias === 'documentation' ? $parentId : $categoryCounter,
+					'date' => $now
+				]);
 			}
 
 			/* handle status */
