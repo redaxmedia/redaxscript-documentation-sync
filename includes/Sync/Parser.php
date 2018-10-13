@@ -147,7 +147,7 @@ class Parser
 	 * @return string
 	 */
 
-	protected function _tidyContent($content = null) : string
+	protected function _tidyContent(string $content = null) : string
 	{
 		$reader = new Reader();
 		$tidyArray = $reader->loadJSON('tidy.json')->getArray();
@@ -164,7 +164,7 @@ class Parser
 	 * @return string
 	 */
 
-	protected function _renderLink($path = null) : string
+	protected function _renderLink(string $path = null) : string
 	{
 		$href = str_replace('vendor' . DIRECTORY_SEPARATOR . 'redaxscript' . DIRECTORY_SEPARATOR . 'redaxscript-documentation', 'https://github.com/redaxscript/redaxscript-documentation/edit/master', $path);
 
