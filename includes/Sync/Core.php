@@ -3,6 +3,7 @@ namespace Sync;
 
 use Redaxscript\Config;
 use Redaxscript\Db;
+use Redaxscript\Dater;
 use Redaxscript\Filesystem;
 use Redaxscript\Language;
 
@@ -70,6 +71,9 @@ class Core
 
 	protected function _process() : int
 	{
+		$dater = new Dater();
+		$dater->init();
+		$now = $dater->getDateTime()->getTimeStamp();
 		$parser = new Parser($this->_language);
 		$filesystem = new Filesystem\Filesystem();
 		$filesystem->init('vendor' . DIRECTORY_SEPARATOR . 'redaxscript' . DIRECTORY_SEPARATOR . 'redaxscript-documentation' . DIRECTORY_SEPARATOR . 'documentation', true);
@@ -93,7 +97,8 @@ class Core
 				'id' => $categoryCounter,
 				'title' => 'Documentation',
 				'alias' => 'documentation',
-				'author' => $author
+				'author' => $author,
+				'date' => $now
 			])
 			->save();
 
@@ -118,7 +123,8 @@ class Core
 						'alias' => $alias,
 						'author' => $author,
 						'rank' => $rank,
-						'parent' => $parentId
+						'parent' => $parentId,
+						'date' => $now
 					])
 					->save();
 			}
@@ -139,7 +145,8 @@ class Core
 						'author' => $author,
 						'text' => $articleText,
 						'rank' => $rank,
-						'category' => $parentAlias === 'documentation' ? $parentId : $categoryCounter
+						'category' => $parentAlias === 'documentation' ? $parentId : $categoryCounter,
+						'date' => $now
 					])
 					->save();
 			}
