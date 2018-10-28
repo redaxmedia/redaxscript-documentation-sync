@@ -18,10 +18,10 @@
 	"require-dev":
 	{
 		"cebe/markdown": "1.2.1",
-		"redaxmedia/php-coding-standard": "1.2.0",
+		"redaxmedia/php-coding-standard": "1.2.1",
 		"redaxscript/redaxscript": "dev-master",
 		"redaxscript/redaxscript-documentation": "dev-master",
-		"squizlabs/php_codesniffer": "3.3.1"
+		"squizlabs/php_codesniffer": "3.3.2"
 	},
 	"scripts":
 	{
