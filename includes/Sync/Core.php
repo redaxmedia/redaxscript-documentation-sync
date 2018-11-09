@@ -6,6 +6,7 @@ use Redaxscript\Dater;
 use Redaxscript\Db;
 use Redaxscript\Filesystem;
 use Redaxscript\Language;
+use Symfony\Component\Finder\Iterator\SortableIterator as SymfonySortableIterator;
 
 /**
  * parent class for the core
@@ -69,7 +70,7 @@ class Core
 		$parser = new Parser($this->_language);
 		$filesystem = new Filesystem\Filesystem();
 		$filesystem->init('vendor' . DIRECTORY_SEPARATOR . 'redaxscript' . DIRECTORY_SEPARATOR . 'redaxscript-documentation' . DIRECTORY_SEPARATOR . 'documentation', true);
-		$filesystemArray = $filesystem->getSortArray();
+		$filesystemObject = new SymfonySortableIterator($filesystem->getIterator(), 1);
 		$author = 'documentation-sync';
 		$categoryCounter = 1000;
 		$parentId = 1000;
@@ -95,7 +96,7 @@ class Core
 
 		/* process filesystem */
 
-		foreach ($filesystemArray as $value)
+		foreach ($filesystemObject as $value)
 		{
 			$title = $parser->getName($value);
 			$alias = $parser->getAlias($value);
